@@ -14,6 +14,13 @@ app.use(express.static('node_modules'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// getting all the posts and comments
+app.get('/posts', function(req, res){
+  Post.find().exec(function(err, data){
+    if (err) {console.error(err)}
+    else{res.send(data)}
+  });
+});
 
 // You will need to create 5 server routes
 // These will define your API:
