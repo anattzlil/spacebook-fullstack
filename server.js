@@ -34,6 +34,13 @@ app.post('/posts', function (req, res) {
       });
 });
 
+app.put('/posts/:postid', function (req,res){
+  Post.findByIdAndUpdate(req.params.postid, req.body,function(err,data){
+    if (err) throw error;
+    else{res.send(data)};
+  })
+})
+
 app.delete('/delete/posts/:postid', function(req, res){
   Post.findByIdAndRemove(req.params.postid, function(err, data){
     if(err){console.error(err)}
