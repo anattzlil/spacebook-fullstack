@@ -8,6 +8,7 @@ var SpacebookApp = function() {
       url: 'posts',
       dataType: "json",
       success: function (data) {
+        posts = []
           console.log(data);
           for (i in data){
             posts[i] = data[i];
@@ -38,8 +39,22 @@ var SpacebookApp = function() {
   }
 
   function addPost(newPost) {
-    posts.push({ text: newPost, comments: [] });
-    _renderPosts();
+
+    $.ajax({
+      method: "POST",
+      url: 'posts',
+      dataType: "json",
+      data:{text: newPost},
+      success: function (data) {
+        // posts.push({ text: newPost, comments: [] });
+        // _renderPosts();
+        getPosts();
+        console.log('success');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+        }
+    })
   }
 
 
@@ -55,9 +70,28 @@ var SpacebookApp = function() {
     }
   }
 
-  var removePost = function(index) {
-    posts.splice(index, 1);
-    _renderPosts();
+  var removePost = function(id, index) {
+    $.ajax({
+      beforeSend: function(){
+        $('.loading').addClass("loader"); 
+      },   
+      method: "DELETE",
+      url: 'delete/posts/'+id,
+      success: function (data) {
+        console.log(posts)
+        posts.splice(index, 1);
+        _renderPosts();
+        console.log('success');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+        },
+        complete: function(){
+          $('.loading').removeClass("loader"); 
+        }
+    })
+    
+
   };
 
   var addComment = function(newComment, postIndex) {
@@ -96,8 +130,10 @@ $('#addpost').on('click', function() {
 var $posts = $(".posts");
 
 $posts.on('click', '.remove-post', function() {
-  var index = $(this).closest('.post').index();;
-  app.removePost(index);
+  var id = $(this).closest('.post').data().id;
+  var index = $(this).closest('.post').index();
+  app.removePost(id, index);
+  $('.loading').removeClass("loader");
 });
 
 $posts.on('click', '.toggle-comments', function() {
