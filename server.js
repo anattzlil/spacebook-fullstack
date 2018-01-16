@@ -40,6 +40,18 @@ app.delete('/delete/posts/:postid', function(req, res){
 
 })
 
+app.post('/posts/:postid/comments', function(req, res){
+  var newComment =  {
+    text: req.body.text,
+    user: req.body.user
+  };
+  Post.findByIdAndUpdate(req.params.postid, {$push:{comments:newComment}}, function(err, newComment){
+    if(err) throw error
+    else {res.send(newComment)}
+  });
+
+})
+
 // You will need to create 5 server routes
 // These will define your API:
 
