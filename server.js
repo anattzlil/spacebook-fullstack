@@ -1,3 +1,5 @@
+// import { error } from 'util';
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -49,7 +51,13 @@ app.post('/posts/:postid/comments', function(req, res){
     if(err) throw error
     else {res.send(newComment)}
   });
+})
 
+app.delete('/posts/:postid/comments/:commentid', function(req, res){
+  Post.findByIdAndUpdate(req.params.postid, {$pull:{comments:{_id:req.params.commentid}}}, function(err, data){
+    if (err) throw error
+    else{res.send(data)};
+  })
 })
 
 // You will need to create 5 server routes
