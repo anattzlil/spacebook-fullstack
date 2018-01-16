@@ -8,6 +8,7 @@ var SpacebookApp = function() {
       url: 'posts',
       dataType: "json",
       success: function (data) {
+        posts = []
           console.log(data);
           for (i in data){
             posts[i] = data[i];
@@ -38,14 +39,16 @@ var SpacebookApp = function() {
   }
 
   function addPost(newPost) {
+
     $.ajax({
       method: "POST",
       url: 'posts',
       dataType: "json",
       data:{text: newPost},
       success: function (data) {
-        posts.push({ text: newPost, comments: [] });
-        _renderPosts();
+        // posts.push({ text: newPost, comments: [] });
+        // _renderPosts();
+        getPosts();
         console.log('success');
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -69,10 +72,11 @@ var SpacebookApp = function() {
 
   var removePost = function(id, index) {
     $.ajax({
+      beforeSend: function(){
+        $('.loading').addClass("loader"); 
+      },   
       method: "DELETE",
-      url: 'delete',
-      dataType: "json",
-      data: {_id: id},
+      url: 'delete/posts/'+id,
       success: function (data) {
         console.log(posts)
         posts.splice(index, 1);
@@ -81,6 +85,9 @@ var SpacebookApp = function() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus);
+        },
+        complete: function(){
+          $('.loading').removeClass("loader"); 
         }
     })
     
@@ -126,6 +133,7 @@ $posts.on('click', '.remove-post', function() {
   var id = $(this).closest('.post').data().id;
   var index = $(this).closest('.post').index();
   app.removePost(id, index);
+  $('.loading').removeClass("loader");
 });
 
 $posts.on('click', '.toggle-comments', function() {

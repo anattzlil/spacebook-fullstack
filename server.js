@@ -32,9 +32,8 @@ app.post('/posts', function (req, res) {
       });
 });
 
-app.delete('/delete', function(req, res){
-  var id = req.body._id;
-  Post.findByIdAndRemove(id, function(err, data){
+app.delete('/delete/posts/:postid', function(req, res){
+  Post.findByIdAndRemove(req.params.postid, function(err, data){
     if(err){console.error(err)}
     else{res.send(data)}
   })
