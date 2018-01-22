@@ -224,3 +224,8 @@ var SpacebookApp = function () {
     var newPost = $(this).siblings('.edit-input').val();
     app.editPost(newPost, postId);
   })
+
+  $( function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+  } );

@@ -75,6 +75,6 @@ app.delete('/posts/:postid/comments/:commentid', function(req, res){
 // 4) to handle adding a comment to a post
 // 5) to handle deleting a comment from a post
 
-app.listen(8000, function () {
+app.listen(process.env.PORT || 8000, function () {
   console.log("what do you want from me! get me on 8000 ;-)");
 });
