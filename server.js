@@ -4,7 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/spacebookDB', function () {
+mongoose.connect(process.env.CONNECTION_STRING || 'mongodb://localhost/spacebookDB', function () {
   console.log("DB connection established!!!");
 })
 
